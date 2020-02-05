@@ -50,6 +50,8 @@ public class ExampleMod
             Collection<IMaterialStats> stats = mat.getAllStats();
             // logger.info("mat: {}", mat.identifier);
             output += "\"" + mat.identifier + "\": {";
+            
+            output += '"colour":' + mat.materialTextColor + ',';
 
             for(IMaterialStats stat : stats) {
                 String statIdentifier = stat.getIdentifier();
