@@ -3,10 +3,13 @@ package com.example.examplemod;
 import java.util.Arrays;
 import java.util.Collection;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import javax.xml.bind.DatatypeConverter;
 
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.Mod;
@@ -41,6 +44,13 @@ public class ExampleMod
         logger.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
     }
 
+    public static byte[] IntToByteArray(int i) {
+        final ByteBuffer bb = ByteBuffer.allocate(Integer.SIZE / Byte.SIZE);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        bb.putInt(i);
+        return bb.array();
+    }
+
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
@@ -51,7 +61,8 @@ public class ExampleMod
             // logger.info("mat: {}", mat.identifier);
             output += "\"" + mat.identifier + "\": {";
             
-            output += "\"colour\": " + mat.materialTextColor + ',';
+            String colour = DatatypeConverter.printHexBinary(IntToByteArray(mat.materialTextColor));
+            output += "\"colour\": \"" + colour + "\",";
 
             for(IMaterialStats stat : stats) {
                 String statIdentifier = stat.getIdentifier();
